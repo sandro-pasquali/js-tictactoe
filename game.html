@@ -52,12 +52,10 @@
 		var clen 	= cells.length;
 		
 		var players = [{
-			center	: false,
 			map		: 0,
 			token	: 'ex'
 		},
 		{
-			center	: false,
 			map		: 0,
 			token	: 'oh'
 		}];
@@ -90,7 +88,6 @@
 			
 			for(w in winners) {
 				w = +w;
-				console.log(p.token, w, p.map & w);
 				if((p.map & w) === w) {
 					
 					for(; i <= 8; i++) {
