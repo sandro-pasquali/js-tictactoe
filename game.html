@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Tic Tac Toe</title>
+	<style type="text/css">
+
+		.ex:before {
+			content: "X";
+		}
+	
+		.oh:before {
+			content: "O";
+		}
+		
+		.cell {
+			display: block;
+			width: 20px;
+			height: 20px;
+			border: 1px black dotted;
+			float: left;
+		}
+		
+		.board {
+			width: 66px;
+			height: 66px;
+			border: 1px black dotted;
+			font-family: Verdana;
+			font-size: 18px;
+		}
+	</style>
+
+</head>
+<body>
+
+	<div class="board">
+		<span class="cell" id="0"></span>
+		<span class="cell" id="1"></span>
+		<span class="cell" id="2"></span>
+		<span class="cell" id="7"></span>
+		<span class="cell" id="8"></span>
+		<span class="cell" id="3"></span>
+		<span class="cell" id="6"></span>
+		<span class="cell" id="5"></span>
+		<span class="cell" id="4"></span>
+	</div>
+	<div id="winner"></div>
+
+	<script>
+	
+		var cells 	= document.getElementsByTagName('span');
+		var clen 	= cells.length;
+		
+		var players = [{
+			center	: false,
+			map		: 0,
+			token	: 'ex'
+		},
+		{
+			center	: false,
+			map		: 0,
+			token	: 'oh'
+		}];
+		
+		var curPlayer = 0;
+		
+		//	The board:
+		//
+		//	0 1 2
+		//	7 8 3
+		//	6 5 4
+		//
+		var winners = {
+			7 	: '111',
+			28 	: '11100',
+			112 : '1110000',
+			193	: '011000001',
+			
+			273 : '100010001',
+			290 : '100100010',
+			324 : '101000100',
+			392 : '110001000'
+		}
+		
+		var checkWinner = function() {
+
+			var w;
+			var i = 0;
+			var p = players[curPlayer];
+			
+			for(w in winners) {
+				w = +w;
+				console.log(p.token, w, p.map & w);
+				if((p.map & w) === w) {
+					
+					for(; i <= 8; i++) {
+						if(w & Math.pow(2, i)) {
+							document.getElementById(i).style.color = 'green';
+						}
+					}
+					
+					document.getElementById('winner').innerHTML = 'Player ' + p.token + ' has won!';
+				}
+			}
+		}
+		
+		while(clen--) {
+			cells[clen].addEventListener('click', function(ev) {
+				var targ = ev.target;
+				var player = players[curPlayer];
+
+				if(targ.className.toLowerCase() !== 'cell' || targ.childNodes.length > 0) {
+					targ.style.color = "red";
+					setTimeout(function() {
+						targ.style.color = null;
+					}, 100);
+					return;
+				}
+			
+				var slot = +ev.target.getAttribute('id');
+				
+				player.map ^= Math.pow(2,slot);
+
+				ev.target.innerHTML = '<span class="' + player.token + '"></span>';
+				
+				checkWinner();
+				curPlayer = +!curPlayer;
+			})
+		}
+	
+	</script>
+</body>
+</html>
